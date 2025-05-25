@@ -1,0 +1,28 @@
+{
+  "name": "persoon",
+  "version": "0.1.0",
+  "description": "CLI tool for generating user persons with tokens",
+  "bin": {
+    "persoon": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "cli",
+    "user",
+    "generator"
+  ],
+  "author": "Avintha Fonseka",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^20.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist"
+  ]
+}

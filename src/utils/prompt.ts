@@ -1,5 +1,12 @@
 import readline from 'readline';
 
+export function createPromptInterface() {
+    return readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+}
+
 export async function askQuestion(
     rl: readline.Interface,
     question: string,
@@ -17,12 +24,5 @@ export async function askQuestion(
             });
         };
         ask();
-    });
-}
-
-export function createPromptInterface() {
-    return readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
     });
 }

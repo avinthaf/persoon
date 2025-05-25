@@ -12,7 +12,7 @@ const DEFAULT_SCHEMA = `interface User {
   
   export default User;`;
 
-export async function initProject(basePath: string) {
+export async function init(basePath: string) {
     const schemaPath = path.join(basePath, 'schema', 'user.ts');
 
     try {

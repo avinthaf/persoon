@@ -10,8 +10,8 @@ npm install -g persoon
 ## Usage
 ```bash
 # Initialize project
-persoon
+npx persoon init
 
 # Create new user
-persoon create
+npx persoon create
 ```# persoon

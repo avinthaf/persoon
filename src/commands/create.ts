@@ -5,7 +5,7 @@ import { parseUserInterface } from '../utils/schemaParser';
 import { UserData } from '../interfaces/User';
 import { generateBearerToken } from '../utils/tokenGenerator';
 
-export async function createUser(basePath: string) {
+export async function create(basePath: string) {
     const rl = createPromptInterface();
 
     try {

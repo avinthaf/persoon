@@ -15,7 +15,7 @@ export async function create(basePath: string) {
         const schemaContent = await fs.readFile(schemaPath, 'utf-8');
         const userFields = parseUserInterface(schemaContent);
         const requiredFields = ['firstName', 'lastName'];
-        
+
         // Filter out token from fields we prompt for
         const fieldsToPrompt = userFields.filter(field => field !== 'token');
         const allFields = [...new Set([...requiredFields, ...fieldsToPrompt])];

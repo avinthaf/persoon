@@ -2,6 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { createPromptInterface, askQuestion } from '../utils/prompt';
 import { UserData } from '../interfaces/User';
+import { generateJWTToken, verifyJWTToken } from '../utils/tokenGenerator';
 
 export async function login(basePath: string) {
     const rl = createPromptInterface();
@@ -23,7 +24,27 @@ export async function login(basePath: string) {
             throw new Error('No token found for this user');
         }
 
-        console.log(`🔑 Your token: ${user.token}`);
+        // Verify existing token
+        try {
+            verifyJWTToken(user.token);
+            console.log('✅ Existing token is valid');
+        } catch (err) {
+            console.log('⚠️  Existing token expired or invalid');
+        }
+
+        // Generate new token while preserving all user data
+        const refreshedUser = {
+            ...user,
+            token: generateJWTToken(user)
+        };
+
+        // Save updated user with new token
+        await fs.writeFile(filePath, JSON.stringify(refreshedUser, null, 2));
+        
+        console.log('\n🔑 Refreshed token:');
+        console.log(refreshedUser.token);
+        console.log('\n✅ Token refreshed and saved to user file');
+
     } catch (err) {
         if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
             throw new Error('User not found');

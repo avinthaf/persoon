@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { createFolderRecursive } from '../utils/fileSystem';
-import { FolderStructure } from '../interfaces/User';
+import { FolderStructure } from '../interfaces/Folder';
 
 const DEFAULT_SCHEMA = `interface User {
     email?: string;

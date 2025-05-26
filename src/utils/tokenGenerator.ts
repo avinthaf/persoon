@@ -11,7 +11,7 @@ const getJwtConfig = () => ({
 
 export function generateJWTToken(user: UserData): string {
   const { secret, expiresIn } = getJwtConfig();
-  
+
   if (!secret || secret === DEFAULT_JWT_SECRET) {
     console.warn('⚠️  Using default JWT secret. Set JWT_SECRET environment variable to use your own.');
   }
@@ -31,28 +31,28 @@ export function verifyJWTToken(token: string): UserData {
 }
 
 export function getUser(token: string): VerifiedUser {
-    const { secret } = getJwtConfig();
-    
-    try {
-      // Verify and decode the token
-      const decoded = jwt.verify(token, secret) as JwtPayload;
-      
-      return {
-        valid: true,
-        user: {
-          firstName: decoded.firstName,
-          lastName: decoded.lastName,
-          email: decoded.email,
-          token: decoded.token,
-          iat: decoded.iat?.toString(),
-          exp: decoded.exp?.toString()
-        }
-      };
-    } catch (error) {
-      return {
-        valid: false,
-        user: null,
-        error: error instanceof Error ? error.message : 'Invalid token'
-      };
-    }
+  const { secret } = getJwtConfig();
+
+  try {
+    // Verify and decode the token
+    const decoded = jwt.verify(token, secret) as JwtPayload;
+
+    return {
+      valid: true,
+      user: {
+        firstName: decoded.firstName,
+        lastName: decoded.lastName,
+        email: decoded.email,
+        token: decoded.token,
+        iat: decoded.iat?.toString(),
+        exp: decoded.exp?.toString()
+      }
+    };
+  } catch (error) {
+    return {
+      valid: false,
+      user: null,
+      error: error instanceof Error ? error.message : 'Invalid token'
+    };
   }
+}

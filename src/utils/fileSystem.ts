@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { FolderStructure } from '../interfaces/User';
+import { FolderStructure } from '../interfaces/Folder';
 
 export async function createFolderRecursive(structure: FolderStructure, parentPath: string) {
     const currentPath = path.join(parentPath, structure.name);

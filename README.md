@@ -1,35 +1,77 @@
 # Persoon
 
-Generate user structures with auto-generated bearer tokens.
+A CLI tool for generating user personas with auto-generated bearer tokens, designed for both development and production environments.
 
 ## Installation
 
 ```bash
-npm install persoon
+npm install -g persoon  # For global CLI usage
+# OR
+npm install persoon    # As project dependency
 ```
 
 ## Usage
 
-```bash
-# Initialize project
-npx persoon init
+### 1. Initialize Project
 
-# Create new user
+```bash
+npx persoon init
+```
+Creates the base structure:
+
+```bash
+your-project/
+└── persoon/
+    ├── schema/
+    │   └── user.ts    # TypeScript interface
+    └── users/         # Generated JSON files
+```
+
+### 2. Create Users
+
+```bash
 npx persoon create
 ```
+Interactively creates a new user JSON file with:
 
-### Decoding Tokens
+- Required fields: `firstName`, `lastName`
+
+- Optional fields: `email`, `phone`, etc.
+
+- Auto-generated `token`
+
+### 3. Customize User Schema
+
+Edit `persoon/schema/user.ts` to modify fields:
 
 ```javascript
-import { getUser } from "persoon/auth";
+interface User {
+  firstName: string;    // Required
+  lastName: string;     // Required
+  email?: string;       // Optional
+  phone?: string;       // New optional field
+  token?: string;       // Auto-generated
+}
 
-const result = getUser(token);
-if (result.valid) {
-  console.log(result.user);
+export default User;
+```
+Now if you run `npx persoon create`, you will be prompted to enter a value for `phone`.
+
+## Authentication
+
+### Token Verification
+
+```javascript
+import { verifyToken } from 'persoon/auth';
+
+const { valid, user } = verifyToken(token);
+if (valid) {
+  console.log('Authenticated user:', user);
 }
 ```
+## Integration Examples
 
-### Example Usage in Next.js
+### Next.js Auth Hook
 
 The following example assumes that you're using Auth0 in production.
 

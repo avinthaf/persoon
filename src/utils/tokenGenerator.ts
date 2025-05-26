@@ -2,7 +2,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { UserData, VerifiedUser } from '../interfaces/User';
 
 const DEFAULT_JWT_SECRET = 'your-strong-secret-key';
-const DEFAULT_JWT_EXPIRES_IN = '1d';
+const DEFAULT_JWT_EXPIRES_IN = '86400000';
 
 const getJwtConfig = () => ({
   secret: process.env.JWT_SECRET || DEFAULT_JWT_SECRET,

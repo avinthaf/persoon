@@ -17,6 +17,7 @@ npm install persoon    # As project dependency
 ```bash
 npx persoon init
 ```
+
 Creates the base structure:
 
 ```bash
@@ -32,6 +33,7 @@ your-project/
 ```bash
 npx persoon create
 ```
+
 Interactively creates a new user JSON file with:
 
 - Required fields: `firstName`, `lastName`
@@ -46,15 +48,16 @@ Edit `persoon/schema/user.ts` to modify fields:
 
 ```javascript
 interface User {
-  firstName: string;    // Required
-  lastName: string;     // Required
-  email?: string;       // Optional
-  phone?: string;       // New optional field
-  token?: string;       // Auto-generated
+  firstName: string; // Required
+  lastName: string; // Required
+  email?: string; // Optional
+  phone?: string; // New optional field
+  token?: string; // Auto-generated
 }
 
 export default User;
 ```
+
 Now if you run `npx persoon create`, you will be prompted to enter a value for `phone`.
 
 ## Authentication
@@ -62,16 +65,60 @@ Now if you run `npx persoon create`, you will be prompted to enter a value for `
 ### Token Verification
 
 ```javascript
-import { verifyToken } from 'persoon/auth';
+import { verifyToken } from "persoon/auth";
 
 const { valid, user } = verifyToken(token);
 if (valid) {
-  console.log('Authenticated user:', user);
+  console.log("Authenticated user:", user);
 }
 ```
+
 ## Integration Examples
 
-### Next.js Auth Hook
+### Next.js
+
+#### Authentication Check in `src/middleware.ts`
+
+```javascript
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
+export function middleware(request: NextRequest) {
+  // Array of public paths that do not require authentication
+  const publicPaths = ["/login", "/signup", "/forgot-password"];
+
+  // If it's a public path, skip checking for auth token
+  if (publicPaths.some((path) => request.nextUrl.pathname.startsWith(path))) {
+    return NextResponse.next();
+  }
+
+  // Assuming the token is saved as a cookie named 'authToken'
+  const authToken = request.cookies.get("authToken")?.value;
+
+  // If no authToken and not already going to login, redirect to login
+  if (!authToken) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  // Otherwise, continue with the request
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+  ],
+};
+```
+
+#### Auth Hook
 
 The following example assumes that you're using Auth0 in production.
 

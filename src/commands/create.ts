@@ -3,7 +3,7 @@ import path from 'path';
 import { createPromptInterface, askQuestion } from '../utils/prompt';
 import { parseUserInterface } from '../utils/schemaParser';
 import { UserData } from '../interfaces/User';
-import { generateBearerToken } from '../utils/tokenGenerator';
+import { generateJWTToken } from '../utils/tokenGenerator';
 
 export async function create(basePath: string) {
     const rl = createPromptInterface();
@@ -29,7 +29,7 @@ export async function create(basePath: string) {
         }
 
         // Automatically generate and add bearer token
-        user.token = `Bearer ${generateBearerToken()}`;
+        user.token = generateJWTToken(user);
 
         const fileName = `${user.firstName!.toLowerCase()}_${user.lastName!.toLowerCase()}.json`;
         const filePath = path.join(basePath, 'users', fileName);

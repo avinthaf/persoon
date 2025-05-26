@@ -14,4 +14,14 @@ npx persoon init
 
 # Create new user
 npx persoon create
-```# persoon
+```
+
+### Decoding Tokens
+
+```javascript
+import { getUser } from 'persoon/auth';
+
+const result = getUser(token);
+if (result.valid) {
+  console.log(result.user);
+}

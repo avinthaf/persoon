@@ -4,6 +4,7 @@ import { init } from './commands/init';
 import { create } from './commands/create';
 import { login } from './commands/login';
 
+
 async function main() {
     const command = process.argv[2];
     const basePath = path.join(process.cwd(), 'persoon');

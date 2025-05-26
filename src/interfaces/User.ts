@@ -8,3 +8,14 @@ export interface FolderStructure {
     children?: FolderStructure[];
     files?: { name: string; content: string }[];
 }
+
+export interface JwtPayload extends UserData {
+    iat?: string; // Issued at
+    exp?: string; // Expiration time
+}
+
+export interface VerifiedUser {
+    valid: boolean;
+    user: JwtPayload | null;
+    error?: string;
+}

@@ -17,12 +17,20 @@
   "author": "Avintha Fonseka",
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^20.0.0"
+    "@types/node": "^20.0.0",
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.9",
     "typescript": "^5.0.0"
   },
   "files": [
     "dist"
-  ]
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/public-api.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./auth": "./dist/public-api.js"
+  }
 }

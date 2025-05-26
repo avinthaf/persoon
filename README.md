@@ -5,7 +5,7 @@ Generate user structures with auto-generated bearer tokens.
 ## Installation
 
 ```bash
-npm install -g persoon
+npm install persoon
 ```
 
 ## Usage

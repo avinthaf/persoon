@@ -7,7 +7,6 @@ const DEFAULT_SCHEMA = `interface User {
     email?: string;
     firstName: string;
     lastName: string;
-    token?: string;
   }
   
   export default User;`;

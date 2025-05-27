@@ -1,6 +1,6 @@
 {
   "name": "persoon",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "CLI tool for generating user persons with tokens",
   "bin": {
     "persoon": "./dist/index.js"
@@ -18,7 +18,9 @@
   "license": "MIT",
   "dependencies": {
     "@types/node": "^20.0.0",
-    "jsonwebtoken": "^9.0.2"
+    "@types/uuid": "^10.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.9",

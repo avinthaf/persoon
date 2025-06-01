@@ -39,28 +39,11 @@ export async function create(basePath: string) {
             const isRequired = !field.endsWith('?');
             const cleanField = field.replace('?', '');
 
-            const nestedField = cleanField.includes(".") ? cleanField : null;
-            let parentField;
-            let childField;
-
-            // Check if nested field
-            if (nestedField) {
-                parentField = cleanField.split(".")[0];
-                childField = cleanField.split(".")[1];
-
-                data[parentField] = data[parentField] || {};
-                data[parentField][childField] = await askQuestion(
-                    rl,
-                    `${cleanField}${isRequired ? ` (required)` : ''}: `,
-                    isRequired || cleanField === 'name' // Ensure name is always required
-                );
-            } else {
-                data[cleanField] = await askQuestion(
-                    rl,
-                    `${cleanField}${isRequired ? ` (required)` : ''}: `,
-                    isRequired || cleanField === 'name' // Ensure name is always required
-                );
-            }
+            data[cleanField] = await askQuestion(
+                rl,
+                `${cleanField}${isRequired ? ` (required)` : ''}: `,
+                isRequired || cleanField === 'name' // Ensure name is always required
+            );
         }
 
         // Generate UUID and add to data
@@ -71,7 +54,7 @@ export async function create(basePath: string) {
         const filePath = path.join(basePath, 'data', schemaName, fileName);
 
         await fs.mkdir(path.dirname(filePath), { recursive: true });
-        await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+        await fs.writeFile(filePath, JSON.stringify(expandNestedFields(data), null, 2));
 
         console.log(`✅ Created ${interfaceName} data: ${fileName}`);
 
@@ -113,4 +96,42 @@ async function createUserFile(
     await fs.writeFile(filePath, JSON.stringify(user, null, 2));
     console.log(`✅ Created user: ${fileName}`);
     console.log(`🔑 Auto-generated token: ${user.token}`);
-}
+};
+
+
+function expandNestedFields<T extends Record<string, any>>(flatObject: T): Record<string, any> {
+    const result: Record<string, any> = {};
+    
+    for (const [key, value] of Object.entries(flatObject)) {
+      // Skip if the value is undefined or null
+      if (value === undefined || value === null) {
+        continue;
+      }
+      
+      // Split the key by dots to handle nesting
+      const keys = key.split('.');
+      let currentLevel = result;
+      
+      for (let i = 0; i < keys.length; i++) {
+        const currentKey = keys[i];
+        const isLastKey = i === keys.length - 1;
+        
+        // If we're at the last key, set the value
+        if (isLastKey) {
+          currentLevel[currentKey] = value;
+        } 
+        // Otherwise, ensure the nested structure exists
+        else {
+          // Create nested object if it doesn't exist
+          if (!currentLevel[currentKey]) {
+            currentLevel[currentKey] = {};
+          }
+          // Move down to the next level
+          currentLevel = currentLevel[currentKey];
+        }
+      }
+    }
+    
+    return result;
+  }
+

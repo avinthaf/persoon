@@ -27,8 +27,8 @@ export async function create(basePath: string) {
 
         // Generic schema handling
         const { interfaceName, fields } = parseSchemaInterface(schemaContent);
-        const data: Record<string, string> = {};
-        
+        const data: Record<string, any> = {};
+
         // Check for 'name' field in schema
         const hasNameField = fields.some(f => f.replace('?', '') === 'name');
         if (!hasNameField) {
@@ -38,11 +38,29 @@ export async function create(basePath: string) {
         for (const field of fields) {
             const isRequired = !field.endsWith('?');
             const cleanField = field.replace('?', '');
-            data[cleanField] = await askQuestion(
-                rl,
-                `${cleanField}${isRequired ? ' (required)' : ''}: `,
-                isRequired || cleanField === 'name' // Ensure name is always required
-            );
+
+            const nestedField = cleanField.includes(".") ? cleanField : null;
+            let parentField;
+            let childField;
+
+            // Check if nested field
+            if (nestedField) {
+                parentField = cleanField.split(".")[0];
+                childField = cleanField.split(".")[1];
+
+                data[parentField] = data[parentField] || {};
+                data[parentField][childField] = await askQuestion(
+                    rl,
+                    `${cleanField}${isRequired ? ` (required)` : ''}: `,
+                    isRequired || cleanField === 'name' // Ensure name is always required
+                );
+            } else {
+                data[cleanField] = await askQuestion(
+                    rl,
+                    `${cleanField}${isRequired ? ` (required)` : ''}: `,
+                    isRequired || cleanField === 'name' // Ensure name is always required
+                );
+            }
         }
 
         // Generate UUID and add to data

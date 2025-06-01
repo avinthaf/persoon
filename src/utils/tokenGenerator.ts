@@ -40,6 +40,7 @@ export function getUser(token: string): VerifiedUser {
     return {
       valid: true,
       user: {
+        id: decoded.id,
         firstName: decoded.firstName,
         lastName: decoded.lastName,
         email: decoded.email,

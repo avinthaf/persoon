@@ -1,5 +1,6 @@
 export interface UserData {
     [key: string]: string | undefined;
+    id?: string;
     token?: string;
 }
 

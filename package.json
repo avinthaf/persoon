@@ -1,6 +1,6 @@
 {
   "name": "persoon",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "CLI tool for generating user persons with tokens",
   "bin": {
     "persoon": "./dist/index.js"
@@ -29,10 +29,20 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/index.js",
+  "main": "./dist/public-api.js",
   "types": "./dist/public-api.d.ts",
   "exports": {
-    ".": "./dist/index.js",
-    "./auth": "./dist/public-api.js"
+    ".": {
+      "types": "./dist/public-api.d.ts",
+      "default": "./dist/public-api.js"
+    },
+    "./auth": {
+      "types": "./dist/utils/tokenGenerator.d.ts",
+      "default": "./dist/utils/tokenGenerator.js"
+    },
+    "./data": {
+      "types": "./dist/utils/data.d.ts",
+      "default": "./dist/utils/data.js"
+    }
   }
 }

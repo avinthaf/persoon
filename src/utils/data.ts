@@ -8,9 +8,9 @@ interface SearchOptions {
 }
 
 /**
- * Finds all JSON objects containing a specific user_id in src/persoon/data/[subfolder]
+ * Finds all JSON objects containing a specific user_id in /persoon/data/[subfolder]
  * @param userId The user_id to find
- * @param subfolder Subfolder within src/persoon/data to search (optional)
+ * @param subfolder Subfolder within persoon/data to search (optional)
  * @param options Search options
  * @returns Array of matching objects
  */
@@ -25,8 +25,8 @@ export async function getPersoonData(
         maxDepth = 5
     } = options;
 
-    // Construct the full path to search
-    const baseDir = path.join(process.cwd(), 'src', 'persoon', 'data', subfolder);
+    // Construct the full path to search in project root
+    const baseDir = path.join(process.cwd(), 'persoon', 'data', subfolder);
 
     async function searchDir(currentPath: string, depth: number): Promise<Array<Record<string, any>>> {
         if (depth > maxDepth) return [];
@@ -49,7 +49,7 @@ export async function getPersoonData(
                         if (data.user_id === userId) {
                             const result = { ...data };
                             if (includeFilename) {
-                                result._sourceFile = fullPath;
+                                result._sourceFile = path.relative(process.cwd(), fullPath);
                             }
                             results.push(result);
                         }

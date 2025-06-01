@@ -1,6 +1,6 @@
 {
   "name": "persoon",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "CLI tool for generating user persons with tokens",
   "bin": {
     "persoon": "./dist/index.js"
